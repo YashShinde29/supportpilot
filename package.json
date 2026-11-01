@@ -1,0 +1,28 @@
+{
+  "name": "supportpilot",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": ["apps/*"],
+  "engines": { "node": "22.x", "npm": ">=10" },
+  "overrides": {
+    "sequelize": { "uuid": "11.1.1" }
+  },
+  "scripts": {
+    "dev:web": "npm run dev --workspace=@supportpilot/web",
+    "dev:api": "npm run dev --workspace=@supportpilot/api",
+    "build": "npm run build --workspaces",
+    "typecheck": "npm run typecheck --workspaces",
+    "db:create": "npm run db:create --workspace=@supportpilot/api",
+    "db:check": "npm run db:check --workspace=@supportpilot/api",
+    "db:migrate": "npm run db:migrate --workspace=@supportpilot/api",
+    "db:status": "npm run db:status --workspace=@supportpilot/api",
+    "db:verify": "npm run db:verify --workspace=@supportpilot/api",
+    "test:webhook": "npm run test:webhook --workspace=@supportpilot/api",
+    "webhook:send": "npm run webhook:send --workspace=@supportpilot/api",
+    "ai:check": "npm run ai:check --workspace=@supportpilot/api",
+    "ai:samples": "npm run ai:samples --workspace=@supportpilot/api",
+    "ai:retry": "npm run ai:retry --workspace=@supportpilot/api --",
+    "agent:create": "npm run agent:create --workspace=@supportpilot/api",
+    "test:agent": "npm run test:agent --workspace=@supportpilot/api"
+  }
+}
