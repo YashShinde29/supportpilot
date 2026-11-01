@@ -7,7 +7,7 @@ async function main() {
   if (action !== "up" && action !== "status") {
     throw new DatabaseConfigError("Use db:migrate or db:status from the project root.");
   }
-  const db = createDatabaseConnection(readDatabaseConfig());
+  const db = createDatabaseConnection(readDatabaseConfig(process.env, true));
   try {
     await db.authenticate();
     const migrator = createMigrator(db);

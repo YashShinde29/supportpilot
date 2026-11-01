@@ -17,7 +17,7 @@ test("agent authentication and approval with PostgreSQL", { timeout: 60_000 }, a
   const previousEnv = process.env.NODE_ENV;
   process.env.NODE_ENV = "production";
   const origin = "https://supportpilot.example";
-  const config = readDatabaseConfig();
+  const config = readDatabaseConfig(process.env, true);
   const admin = createDatabaseConnection(config);
   const schema = `agent_test_${randomUUID().replaceAll("-", "")}`;
   assert.match(schema, /^agent_test_[a-f0-9]{32}$/);

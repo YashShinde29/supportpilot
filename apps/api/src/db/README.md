@@ -53,6 +53,18 @@ Agent queries exclude password hashes by default. Authentication explicitly requ
 
 ## Files and migrations
 
+## Neon connections
+
+`neon deploy` writes `DATABASE_URL` (pooled), `DATABASE_URL_UNPOOLED` (direct), and `NEON_BRANCH` to the ignored root `.env.local` (or root `.env` when present). API scripts load `apps/api/.env`, root `.env`, then root `.env.local`; existing process variables take precedence. Database URLs take precedence over local `DB_*` settings. Keep the Gemini key, webhook secret and seed-account settings in `apps/api/.env` for local runs. Never use `NEXT_PUBLIC_` for database credentials.
+
+The Fastify Node runtime retains Sequelize with `pg`. URL connections require TLS with certificate validation. The existing local `DB_*` configuration keeps working without TLS when no URL is set. Migrations, schema verification and integration tests use the direct URL; application traffic uses the pooled URL. Tests create and remove only their randomly named test schemas.
+
+After connecting a new database, run `npm run db:migrate`, `npm run db:verify`, and `npm run agent:create`, then start the API and frontend. Migrations are an explicit deployment step, never an API-startup operation. Set both database URLs in the backend hosting environment when deploying Fastify. Neon provisioning does not publish the Next.js or Fastify application.
+
+To return to local PostgreSQL, remove the Neon URL variables from the runtime environment (for example, move the ignored root `.env.local` outside the workspace); the original `apps/api/.env` values are retained. Local conversations are not copied to Neon.
+
+## Migration files
+
 - `models.ts` declares and initializes the five typed models and associations. Initialize them once for the application's Sequelize connection.
 - `migrations/001-initial-schema.ts` defines the initial PostgreSQL schema independently of model code. Its table creation runs in a transaction.
 - `migrator.ts` registers migrations explicitly, so the same imports work through TypeScript and in compiled JavaScript.

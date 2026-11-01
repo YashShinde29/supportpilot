@@ -9,7 +9,10 @@ export function createDatabaseConnection(config: DatabaseConfig, schema?: string
     logging: false,
     define: { schema },
     pool: { max: 5, min: 0, idle: 10_000, acquire: 10_000 },
-    dialectOptions: { connectionTimeoutMillis: 5_000 },
+    dialectOptions: {
+      connectionTimeoutMillis: 10_000,
+      ...(config.ssl ? { ssl: { rejectUnauthorized: true } } : {}),
+    },
     retry: { max: 0 },
   });
 }

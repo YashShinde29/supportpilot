@@ -9,7 +9,7 @@ import { initializeModels } from "./models.js";
 // Integration checks against real PostgreSQL. All sample rows are rolled back,
 // including when an assertion fails. Never use sync(), truncate(), or reset here.
 async function verify() {
-  const db = createDatabaseConnection(readDatabaseConfig());
+  const db = createDatabaseConnection(readDatabaseConfig(process.env, true));
   const { Customer, Agent, Conversation, Message, Draft } = initializeModels(db);
   const token = randomUUID();
   let check = "migration status";

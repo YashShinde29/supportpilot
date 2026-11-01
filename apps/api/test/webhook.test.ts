@@ -12,7 +12,7 @@ import { DraftProviderError, type DraftProvider, type DraftInput } from "../src/
 import { ingestMessage } from "../src/messages/ingest.js";
 
 test("signed webhook with real PostgreSQL", { timeout: 60_000 }, async (t) => {
-  const config = readDatabaseConfig();
+  const config = readDatabaseConfig(process.env, true);
   const admin = createDatabaseConnection(config);
   // The schema name is generated here, never accepted from an environment variable.
   const schema = `webhook_test_${randomUUID().replaceAll("-", "")}`;

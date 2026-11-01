@@ -2,10 +2,17 @@
   "name": "supportpilot",
   "version": "0.1.0",
   "private": true,
-  "workspaces": ["apps/*"],
-  "engines": { "node": "22.x", "npm": ">=10" },
+  "workspaces": [
+    "apps/*"
+  ],
+  "engines": {
+    "node": "22.x",
+    "npm": ">=10"
+  },
   "overrides": {
-    "sequelize": { "uuid": "11.1.1" }
+    "sequelize": {
+      "uuid": "11.1.1"
+    }
   },
   "scripts": {
     "dev:web": "npm run dev --workspace=@supportpilot/web",
@@ -24,5 +31,9 @@
     "ai:retry": "npm run ai:retry --workspace=@supportpilot/api --",
     "agent:create": "npm run agent:create --workspace=@supportpilot/api",
     "test:agent": "npm run test:agent --workspace=@supportpilot/api"
+  },
+  "dependencies": {
+    "@neon/config": "^1.10.0",
+    "@neon/env": "^1.6.8"
   }
 }

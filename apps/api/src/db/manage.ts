@@ -8,7 +8,7 @@ async function main() {
     throw new DatabaseConfigError("Use db:check or db:create from the project root.");
   }
 
-  const config = readDatabaseConfig();
+  const config = readDatabaseConfig(process.env, command === "create");
   // CREATE DATABASE must run against an existing maintenance database.
   const connection = createDatabaseConnection({
     ...config,
@@ -48,7 +48,7 @@ main().catch((error: unknown) => {
   } else {
     // Avoid printing connection objects or credentials in terminal output.
     console.error(
-      "Database operation failed. Check that PostgreSQL is running and apps/api/.env matches DBeaver. " +
+      "Database operation failed. Check the database environment variables, network access and TLS configuration. " +
       "For db:create, the user needs permission to create databases. For db:check, the database must already exist.",
     );
   }

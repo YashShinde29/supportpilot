@@ -4,7 +4,23 @@ A customer support application for the Datastraw take-home assessment, built inc
 
 ## Current phase
 
-Next.js starter page, PostgreSQL schema, signed webhook, Gemini drafts, and authenticated agent APIs for conversations, approval, and retry. Customer/agent screens are the next phase.
+Customer and agent screens, signed webhooks, Gemini drafts, authenticated approval, and PostgreSQL persistence are implemented. Neon PostgreSQL is connected; public frontend/backend hosting is the next deployment step.
+
+## Neon database
+
+`neon.ts` declares PostgreSQL-only infrastructure, retaining our Fastify authentication and Gemini integration. `npx neon@latest deploy` pulls database URLs into the ignored root `.env.local`. API scripts load these settings automatically: pooled `DATABASE_URL` for requests and direct `DATABASE_URL_UNPOOLED` for migrations/tests, with verified TLS. See [connection details](apps/api/src/db/README.md).
+
+Run `npm run db:migrate`, `npm run db:verify`, then `npm run agent:create` for a new database. The existing API `.env` supplies the agent credentials and Gemini key; keep all environment files out of Git. Restart an already-running API after adding or changing environment files. Neon setup does not upload local database conversations or deploy the web/API servers.
+
+The end-to-end smoke script uses a running API on port 4101 by default (override `SMOKE_API_URL`). After building and starting that API, run:
+
+```sh
+node --env-file=apps/api/.env --env-file=.env.local scripts/neon-smoke.mjs
+```
+
+This makes a real Gemini call, verifies login, duplicate intake, private drafts, edited approval, public replies, Neon persistence, and TLS. It leaves a fictional Meera message/reply for review and logs out its test session. Use an isolated environment for repeated smoke runs. The automated agent/webhook suites instead use temporary schemas and fake AI responses.
+
+Neon's separate skill installer requires Node.js 22.20 or newer. The Neon plugin's bundled skills were available and used during setup; the app itself builds on the existing Node.js 22.14 runtime.
 
 ## Run locally
 
