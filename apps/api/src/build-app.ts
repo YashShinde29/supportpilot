@@ -10,7 +10,7 @@ import type { DraftProvider } from "./ai/provider.js";
 import { agentApi } from "./auth/routes.js";
 import { customerRoutes } from "./customer/routes.js";
 
-export function buildApp(options: { db?: Sequelize; webhookSecret?: string; logger?: boolean; draftProvider?: DraftProvider; webOrigin?: string } = {}) {
+export function buildApp(options: { db?: Sequelize; webhookSecret?: string; logger?: boolean; draftProvider?: DraftProvider; webOrigin?: string } = {}, createFastify: typeof Fastify = Fastify) {
   const secret = options.webhookSecret ?? process.env.WEBHOOK_SECRET;
   if (!secret?.trim()) throw new Error("Set WEBHOOK_SECRET in apps/api/.env before starting the API.");
   const draftProvider = options.draftProvider ?? createGeminiProvider();
@@ -22,7 +22,7 @@ export function buildApp(options: { db?: Sequelize; webhookSecret?: string; logg
   }
   const db = options.db ?? createDatabaseConnection(readDatabaseConfig());
   initializeModels(db);
-  const app = Fastify({
+  const app = createFastify({
     logger: options.logger ?? true,
     ajv: { customOptions: { coerceTypes: false, removeAdditional: false, useDefaults: false } },
   });

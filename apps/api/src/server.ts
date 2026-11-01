@@ -1,6 +1,8 @@
+import Fastify from "fastify";
 import { buildApp } from "./build-app.js";
 
-const app = buildApp();
+// Vercel detects the framework from a direct import in the server entrypoint.
+const app = buildApp({}, Fastify);
 const port = Number(process.env.PORT ?? 3001);
 
 if (!Number.isInteger(port) || port < 1 || port > 65535) {
