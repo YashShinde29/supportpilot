@@ -13,6 +13,7 @@
     "ai:samples": "node --env-file-if-exists=.env --env-file-if-exists=../../.env --env-file-if-exists=../../.env.local --import tsx src/ai/check.ts --samples",
     "ai:retry": "node --env-file-if-exists=.env --env-file-if-exists=../../.env --env-file-if-exists=../../.env.local --import tsx src/ai/retry.ts",
     "agent:create": "node --env-file-if-exists=.env --env-file-if-exists=../../.env --env-file-if-exists=../../.env.local --import tsx src/auth/create-agent.ts",
+    "agent:create-demo": "node --env-file-if-exists=.env --env-file-if-exists=../../.env --env-file-if-exists=../../.env.local --import tsx src/auth/create-demo-agent.ts",
     "test:agent": "node --env-file-if-exists=.env --env-file-if-exists=../../.env --env-file-if-exists=../../.env.local --import tsx --test test/agent.test.ts",
     "webhook:send": "node --env-file-if-exists=.env --env-file-if-exists=../../.env --env-file-if-exists=../../.env.local --import tsx src/webhooks/send-sample.ts",
     "db:create": "node --env-file-if-exists=.env --env-file-if-exists=../../.env --env-file-if-exists=../../.env.local --import tsx src/db/manage.ts create",

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, type Dispatch, type SetStateAction, type FormEvent } from "react";
 import { api, ApiError, type Conversation, type Customer, type Draft, type Thread } from "@/lib/api";
+import { DEMO_AGENT_EMAIL, DEMO_AGENT_PASSWORD } from "@/lib/demo-agent";
 
 const errorText = (error: unknown) => error instanceof Error ? error.message : "Please try again.";
 const draftFailure = (code?: string | null) => {
@@ -94,7 +95,15 @@ function AgentWorkspace() {
   async function login(event: FormEvent) { event.preventDefault(); setBusy(true); setError(""); try { const result = await api<{ agent: { name: string } }>("/auth/login", { email, password }); setAgent(result.agent); setPassword(""); } catch (failure) { setError(errorText(failure)); } finally { setBusy(false); } }
   async function logout() { setBusy(true); try { await api("/auth/logout", {}); setAgent(null); setError(""); } catch (failure) { setError(errorText(failure)); } finally { setBusy(false); } }
   if (checking) return <p role="status">Checking your session…</p>;
-  if (!agent) return <section className="panel mx-auto max-w-md"><p className="eyebrow">Agent workspace</p><h2 className="mt-2 text-2xl font-semibold">Welcome back.</h2><p className="mt-2 mb-6 text-sm text-stone-500">Sign in to review drafts and help your customers.</p><form onSubmit={login}><label htmlFor="email" className="mb-2 block text-sm">Email</label><input id="email" className="field" type="email" autoComplete="username" required value={email} onChange={(event) => setEmail(event.target.value)} /><label htmlFor="password" className="mt-4 mb-2 block text-sm">Password</label><input id="password" className="field" type="password" autoComplete="current-password" required value={password} onChange={(event) => setPassword(event.target.value)} /><Notice text={error} /><button className="primary mt-5 w-full" disabled={busy}>{busy ? "Signing in…" : "Sign in"}</button></form></section>;
+  if (!agent) return <section className="panel mx-auto max-w-md"><p className="eyebrow">Agent workspace</p><h2 className="mt-2 text-2xl font-semibold">Welcome back.</h2><p className="mt-2 mb-6 text-sm text-stone-500">Sign in to review drafts and help your customers.</p><aside aria-label="Demo login" className="mb-6 rounded-xl border border-emerald-200 bg-emerald-50 p-4">
+        <h3 className="text-sm font-semibold text-emerald-950">Demo login</h3>
+        <p className="mt-1 text-xs leading-5 text-stone-600">Use this shared account to test conversations and approve replies. Demo activity is visible to other testers.</p>
+        <dl className="mt-3 space-y-2 text-sm">
+          <div><dt className="font-medium text-stone-600">Email</dt><dd className="break-all font-mono text-emerald-950">{DEMO_AGENT_EMAIL}</dd></div>
+          <div><dt className="font-medium text-stone-600">Password</dt><dd className="break-all font-mono text-emerald-950">{DEMO_AGENT_PASSWORD}</dd></div>
+        </dl>
+        <button type="button" className="secondary mt-4" disabled={busy} onClick={() => { setEmail(DEMO_AGENT_EMAIL); setPassword(DEMO_AGENT_PASSWORD); setError(""); }}>Use demo credentials</button>
+      </aside><form onSubmit={login}><label htmlFor="email" className="mb-2 block text-sm">Email</label><input id="email" className="field" type="email" autoComplete="username" required value={email} onChange={(event) => setEmail(event.target.value)} /><label htmlFor="password" className="mt-4 mb-2 block text-sm">Password</label><input id="password" className="field" type="password" autoComplete="current-password" required value={password} onChange={(event) => setPassword(event.target.value)} /><Notice text={error} /><button className="primary mt-5 w-full" disabled={busy}>{busy ? "Signing in…" : "Sign in"}</button></form></section>;
   return <><div className="mb-5 flex items-center justify-between"><p className="text-sm text-stone-600">Signed in as <strong>{agent.name}</strong></p><button className="secondary" disabled={busy} onClick={() => void logout()}>Sign out</button></div><Notice text={error} /><Inbox onUnauthorized={expired} /></>;
 }
 
